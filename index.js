@@ -58,6 +58,45 @@ app.get('/cartoes', (req, res) => {
     res.status(200).json(cartoes); // Retorna o vetor de cartões
 });
 
-app.listen(porta, () => { //fazer pergunta pro professor
+// Rota para criar um novo cartão
+app.post('/falas', (req, res) => {
+    const { nome, valor, descricao, imagem } = req.body;
+    const novoCartao = { nome, valor, descricao, imagem };
+    cartoes.push(novoCartao);
+    res.status(201).json(novoCartao); // Retorna o novo cartão criado
+    console.log('Novo cartão criado');
+  });
+  
+  // Rota para atualizar um cartão existente
+  app.put('/cartoes/:id', (req, res) => {
+    const id = req.params.id;
+    const { nome, valor, descricao, imagem } = req.body;
+    const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
+    if (!cartao) {
+      res.status(404).json({ mensagem: 'Cartão não encontrado' });
+    } else {
+      cartao.nome = nome;
+      cartao.valor = valor;
+      cartao.descricao = descricao;
+      cartao.imagem = imagem;
+      res.status(200).json(cartao); // Retorna o cartão atualizado
+      console.log('Cartão atualizado');
+    }
+  });
+  
+  // Rota para excluir um cartão existente
+  app.delete('/cartoes/:id', (req, res) => {
+    const id = req.params.id;
+    const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
+    if (!cartao) {
+      res.status(404).json({ mensagem: 'Cartão não encontrado' });
+    } else {
+      cartoes.splice(cartoes.indexOf(cartao), 1);
+      res.status(200).json({ mensagem: 'Cartão excluído' });
+      console.log('Cartão excluído');
+    }
+  });
+  
+  app.listen(porta, () => {
     console.log(`Servidor rodando na porta ${porta}`);
-});
+  });

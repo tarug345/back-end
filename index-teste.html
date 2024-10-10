@@ -5,54 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teste Backend</title>
   <style>
+    /* Estilos gerais */
     body {
       font-family: Arial, sans-serif;
-      /* background-color: #a5f5ffce;
-      color: black; */
+      margin: 0;
+      padding: 0;
+      /* background-color: #f0f0f0; */
       background: url('https://i.redd.it/5br86efyhc951.png') no-repeat;
       background-size: cover;
-      color: aliceblue;
       width: 100vw;
       height: 100vh;
-      margin: 0;
-      padding: 0;
       overflow: hidden;
     }
+
     h1 {
       text-align: center;
+      margin-top: 50px;
+      background-image: linear-gradient( rgba(83, 200, 255, 0.726), rgba(122, 228, 255, 0.856) );
+      background-clip:text; 
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    #cartoes {
-      margin-top: 20px;
+
+    /* Estilos para o container dos botões */
+    #botoes {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
     }
-    #cartoes ul {
-      list-style: none;
+
+    .botao {
+      background: linear-gradient( rgba(83, 200, 255, 0.726), rgba(122, 228, 255, 0.856) );
+      color: white;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 1vh;
+      transition: background-color 0.3s;
+    }
+
+    .botao:hover {
+      background-color: #3e8e41;
+    }
+
+    /* Estilos para a lista de cartões */
+    #lista-cartoes {
+      list-style-type: none;
       padding: 0;
       margin: 0;
     }
-    #cartoes li {
-      margin-bottom: 10px;
+
+    #lista-cartoes li {
+      width: 27.8vw;
+      height: 8vh;
       display: flex;
       align-items: center;
-      justify-content: space-evenly;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-left: 35.6vw;
     }
-    #cartoes li img {
-      width: 5vw;
-      height: 5vw;
+
+    #lista-cartoes li img {
+      width: 2vw;
+      height: 4vh;
       margin-right: 10px;
       border-radius: 1vh;
     }
-    .botao {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background: linear-gradient( rgba(111, 190, 255, 0.9), rgba(172, 222, 255, 0.9));
-      transition: all 0.4s ease;
+
+    #lista-cartoes li span {
+      margin-right: 10px;
     }
-    .botao:hover {
-      background: linear-gradient( rgba(144, 205, 255, 0.76), rgba(205, 235, 255, 0.76));
-      transform: translateY(-0.33vh);
+
+    #lista-cartoes li span:nth-child(2) {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -77,91 +107,94 @@
     const btnExcluirCartao = document.getElementById('btn-excluir-cartao');
     const listaCartoes = document.getElementById('lista-cartoes');
 
-    btnObterCartoes.addEventListener('click', obterCartoes);
-    btnCriarCartao.addEventListener('click', criarCartao);
-    btnAtualizarCartao.addEventListener('click', atualizarCartao);
-    btnExcluirCartao.addEventListener('click', excluirCartao);
+    btnObterCartoes.addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://localhost:3000/cartoes');
+        const cartoes = await response.json();
+        listaCartoes.innerHTML = '';
+        cartoes.forEach(cartao => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <img src="${cartao.imagem}" alt="${cartao.nome}">
+            <span>${cartao.nome}</span>
+            <span>${cartao.valor}</span>
+            <span>${cartao.descricao}</span>
+          `;
+          listaCartoes.appendChild(li);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    });
 
-    function obterCartoes() {
-      fetch('http://localhost:3000/cartoes')
-        .then(response => response.json())
-        .then(cartoes => {
-          listaCartoes.innerHTML = '';
-          cartoes.forEach(cartao => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-              <img src="${cartao.imagem}" alt="${cartao.nome}">
-              <span>${cartao.nome}</span>
-              <span>${cartao.valor}</span>
-              <span>${cartao.descricao}</span>
-            `;
-            listaCartoes.appendChild(li);
-          });
-        })
-        .catch(error => console.error(error));
-    }
+    btnCriarCartao.addEventListener('click', async () => {
+      try {
+        const nome = prompt('Digite o nome do cartão:');
+        const valor = prompt('Digite o valor do cartão:');
+        const descricao = prompt('Digite a descrição do cartão:');
+        const imagem = prompt('Digite a URL da imagem do cartão:');
+        const cartao = {
+          nome,
+          valor,
+          descricao,
+          imagem
+        };
+        const response = await fetch('http://localhost:3000/cartoes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(cartao)
+        });
+        if (response.ok) {
+          await obterCartoes();
+        } else {
+          console.error('Erro ao criar cartão:', response.status);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
 
-    function criarCartao() {
-      const nome = prompt('Digite o nome do cartão:');
-      const valor = prompt('Digite o valor do cartão:');
-      const descricao = prompt('Digite a descrição do cartão:');
-      const imagem = prompt('Digite a URL da imagem do cartão:');
-      const cartao = {
-        nome,
-        valor,
-        descricao,
-        imagem
-      };
-      fetch('http://localhost:3000/cartoes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(cartao)
-      })
-        .then(response => {
-          if (response.ok) {
-            obterCartoes();
-          } else {
-            console.error('Erro ao criar cartão:', response.status);
-          }
-        })
-        .catch(error => console.error(error));
-    }
+    btnAtualizarCartao.addEventListener('click', async () => {
+      try {
+        const id = prompt('Digite o ID do cartão:');
+        const nome = prompt('Digite o novo nome do cartão:');
+        const valor = prompt('Digite o novo valor do cartão:');
+        const descricao = prompt('Digite a nova descrição do cartão:');
+        const imagem = prompt('Digite a nova URL da imagem do cartão:');
+        const cartao = {
+          nome,
+          valor,
+          descricao,
+          imagem
+        };
+        const response = await fetch(`http://localhost:3000/cartoes/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(cartao)
+        });
+        const cartaoAtualizado = await response.json();
+        console.log(cartaoAtualizado);
+      } catch (error) {
+        console.error(error);
+      }
+    });
 
-    function atualizarCartao() {
-      const id = prompt('Digite o ID do cartão:');
-      const nome = prompt('Digite o novo nome do cartão:');
-      const valor = prompt('Digite o novo valor do cartão:');
-      const descricao = prompt('Digite a nova descrição do cartão:');
-      const imagem = prompt('Digite a nova URL da imagem do cartão:');
-      const cartao = {
-        nome,
-        valor,
-        descricao,
-        imagem
-      };
-      fetch(`http://localhost:3000/cartoes/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(cartao)
-      })
-        .then(response => response.json())
-        .then(cartao => console.log(cartao))
-        .catch(error => console.error(error));
-    }
-
-    function excluirCartao() {
-      const id = prompt('Digite o ID do cartão:');
-      fetch(`http://localhost:3000/cartoes/${id}`, {
-        method: 'DELETE'
-      })
-        .then(response => response.json())
-        .then(mensagem => console.log(mensagem))
-        .catch(error => console.error(error));
-    }
+    btnExcluirCartao.addEventListener('click', async () => {
+      try {
+        const id = prompt('Digite o ID do cartão:');
+        const response = await fetch(`http://localhost:3000/cartoes/${id}`, {
+          method: 'DELETE'
+        });
+        const mensagem = await response.json();
+        console.log(mensagem);
+      } catch (error) {
+        console.error(error);
+      }
+    });
   </script>
 </body>
 </html>

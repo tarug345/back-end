@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 
 // Rota específica para obter os cartões (opcional, pois agora também está na rota '/')
 app.get('/cartoes', (req, res) => {
-    res.status(200).json(cartoes); // Retorna o vetor de cartões
+    res.status(200).json({cartoes}); // Retorna o vetor de cartões
 });
 
 // Rota para criar um novo cartão

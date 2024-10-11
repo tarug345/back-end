@@ -85,8 +85,8 @@ app.post('/falas', (req, res) => {
   });
   
   // Rota para excluir um cartão existente
-  app.delete('/cartoes/:id', (req, res) => {
-    const id = req.params.id;
+  app.delete(/* '/cartoes/:id', */ (req, res) => {
+ /* const id = req.params.id;
     const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
     if (!cartao) {
       res.status(404).json({ mensagem: 'Cartão não encontrado' });
@@ -94,7 +94,11 @@ app.post('/falas', (req, res) => {
       cartoes.splice(cartoes.indexOf(cartao), 1);
       res.status(200).json({ mensagem: 'Cartão excluído' });
       console.log('Cartão excluído');
-    }
+    } */
+    const {cartao} = req.body;
+    cartaos.splice(cartao, 1);
+    console.log(cartao + ' excluído');
+    res.status(201).json({mensagem: 'Cartão excluído' + cartao});
   });
   
   app.listen(porta, () => {

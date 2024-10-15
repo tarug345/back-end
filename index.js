@@ -46,30 +46,32 @@ const cartoes = [
         imagem: 'https://portal6.com.br/wp-content/uploads/2021/08/zeca.png'
     }
 ];
-
 // Modificação na rota raiz para retornar o vetor de cartões
-app.get('/', (req, res) => {
-    res.status(200).json(cartoes); // Retorna o vetor de cartões quando acessa a rota '/'
-    console.log('Cartões enviados');
-});
+
+/* app.get('/', (req, res) => {
+    res.status(200).json(cartoes); */ // Retorna o vetor de cartões quando acessa a rota '/'
+/*     console.log('Cartões enviados');
+}); */
 
 // Rota específica para obter os cartões (opcional, pois agora também está na rota '/')
 app.get('/cartoes', (req, res) => {
     res.status(200).json({cartoes}); // Retorna o vetor de cartões
+    console.log('01');
 });
-
 // Rota para criar um novo cartão
-app.post('/falas', (req, res) => {
+app.post('/cartoes', (req, res) => { //antes era "/falas"
     const { nome, valor, descricao, imagem } = req.body;
-    const novoCartao = { nome, valor, descricao, imagem };
-    cartoes.push(novoCartao);
-    res.status(201).json(novoCartao); // Retorna o novo cartão criado
-    console.log('Novo cartão criado');
+
+    /* const novoCartao = { nome, valor, descricao, imagem }; */
+
+    cartoes.push({nome: nome, valor: valor, imagem: imagem});
+    // console.log('Novo cartão criado');
+    res.status(201).json({ mensagem: 'Cartão criado'}); // Retorna o novo cartão criado
   });
   
   // Rota para atualizar um cartão existente
-  app.put('/cartoes/:id', (req, res) => {
-    const id = req.params.id;
+  app.put('/cartoes/', (req, res) => { //antes era "/cartoes/:id"
+    /* const id = req.params.id;
     const { nome, valor, descricao, imagem } = req.body;
     const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
     if (!cartao) {
@@ -81,11 +83,17 @@ app.post('/falas', (req, res) => {
       cartao.imagem = imagem;
       res.status(200).json(cartao); // Retorna o cartão atualizado
       console.log('Cartão atualizado');
-    }
+    } */
+
+    const numero = req.body.numero;
+    const mensagem = req.body.mensagem;
+    vetor[numero].mensagem = mensagem;
+    console.log(vetor);
+    req.status(201).json({ mensagem: 'Cartão atualizado'});
   });
   
   // Rota para excluir um cartão existente
-  app.delete(/* '/cartoes/:id', */ (req, res) => {
+  app.delete( '/cartoes', (req, res) => {
  /* const id = req.params.id;
     const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
     if (!cartao) {
@@ -96,7 +104,7 @@ app.post('/falas', (req, res) => {
       console.log('Cartão excluído');
     } */
     const {cartao} = req.body;
-    cartaos.splice(cartao, 1);
+    cartoes.splice(cartao, 1);
     console.log(cartao + ' excluído');
     res.status(201).json({mensagem: 'Cartão excluído' + cartao});
   });

@@ -13,7 +13,7 @@ const cartoes = [
         nome: 'Cartão 1',
         valor: '19,20',
         descricao: 'Descrição do Cartão 1',
-        imagem: 'https://assets.mubicdn.net/images/artworks/605435/images-original.png?1686656725'
+        imagem: 'https://driftforu.com/cdn/shop/products/image_0d0ed780-67c6-454e-8225-d01518819aa0.jpg?v=1710955863&width=1445'
     },
     {
         nome: 'Cartão 2',
@@ -48,61 +48,30 @@ const cartoes = [
 ];
 // Modificação na rota raiz para retornar o vetor de cartões
 
-/* app.get('/', (req, res) => {
-    res.status(200).json(cartoes); */ // Retorna o vetor de cartões quando acessa a rota '/'
-/*     console.log('Cartões enviados');
-}); */
-
 // Rota específica para obter os cartões (opcional, pois agora também está na rota '/')
 app.get('/cartoes', (req, res) => {
-    res.status(200).json({cartoes}); // Retorna o vetor de cartões
-    console.log('01');
+    res.status(200).json({ cartoes }); // Retorna o vetor de cartões
+    console.log('Cartões enviados');
 });
 // Rota para criar um novo cartão
 app.post('/cartoes', (req, res) => { //antes era "/falas"
     const { nome, valor, descricao, imagem } = req.body;
-
-    /* const novoCartao = { nome, valor, descricao, imagem }; */
-
-    cartoes.push({nome: nome, valor: valor, imagem: imagem});
-    // console.log('Novo cartão criado');
+    cartoes.push({ nome, valor: valor, imagem: imagem, descricao: descricao});
     res.status(201).json({ mensagem: 'Cartão criado'}); // Retorna o novo cartão criado
   });
   
   // Rota para atualizar um cartão existente
-  app.put('/cartoes/', (req, res) => { //antes era "/cartoes/:id"
-    /* const id = req.params.id;
-    const { nome, valor, descricao, imagem } = req.body;
-    const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
-    if (!cartao) {
-      res.status(404).json({ mensagem: 'Cartão não encontrado' });
-    } else {
-      cartao.nome = nome;
-      cartao.valor = valor;
-      cartao.descricao = descricao;
-      cartao.imagem = imagem;
-      res.status(200).json(cartao); // Retorna o cartão atualizado
-      console.log('Cartão atualizado');
-    } */
+  app.put('/cartoes', (req, res) => { //antes era "/cartoes/:id"
 
     const numero = req.body.numero;
     const mensagem = req.body.mensagem;
-    vetor[numero].mensagem = mensagem;
+    cartao[numero].mensagem = mensagem;
     console.log(vetor);
-    req.status(201).json({ mensagem: 'Cartão atualizado'});
+    res.status(201).json({ mensagem: 'Cartão atualizado'});
   });
   
   // Rota para excluir um cartão existente
   app.delete( '/cartoes', (req, res) => {
- /* const id = req.params.id;
-    const cartao = cartoes.find((cartao) => cartao.id === parseInt(id));
-    if (!cartao) {
-      res.status(404).json({ mensagem: 'Cartão não encontrado' });
-    } else {
-      cartoes.splice(cartoes.indexOf(cartao), 1);
-      res.status(200).json({ mensagem: 'Cartão excluído' });
-      console.log('Cartão excluído');
-    } */
     const {cartao} = req.body;
     cartoes.splice(cartao, 1);
     console.log(cartao + ' excluído');

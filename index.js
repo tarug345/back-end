@@ -65,7 +65,7 @@ app.post('/cartoes', (req, res) => { //antes era "/falas"
 
     const numero = req.body.numero;
     const mensagem = req.body.mensagem;
-    cartao[numero].mensagem = mensagem;
+    cartoes[numero].mensagem = mensagem;
     console.log(vetor);
     res.status(201).json({ mensagem: 'Cartão atualizado'});
   });

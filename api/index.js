@@ -48,7 +48,7 @@ app.get('/cartoes', async (req, res) => {
 });
 // Rota para criar um novo cartão
 app.post('/cartoes', async (req, res) => {
-  const { nome, valor, descricao, imagem } = req.body;
+  const { nome, valor, img } = req.body;
   if (!nome) {
     res.status(400).json({ message: 'nome do cartão e obrig' });
     console.log('nao');
@@ -76,7 +76,7 @@ app.post('/cartoes', async (req, res) => {
       console.log('erro ao cadastrar', error);
       res.status(500).json({ error: 'erro ao cadastrar' });
     }
-    cartoes.push({ nome, valor: valor, imagem: imagem, descricao: descricao });
+    cartoes.push({ nome, valor: valor, img: img });
     res.status(201).json({ mensagem: 'Cartão criado' }); // Retorna o novo cartão criado
   }
 });

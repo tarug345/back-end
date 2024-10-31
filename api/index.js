@@ -83,7 +83,7 @@ app.post('/cartoes', async (req, res) => {
 
 // Rota para atualizar um cartão existente
 app.put('/cartoes', async (req, res) => {
-  const { cartao, nome, valor, imagem, descricao } = req.body;
+  const { id, nome, valor, img } = req.body;
   if (!id) {
     res.status(400).json({ message: 'id do cartão não fornecido' });
     console.log('nao');
@@ -98,8 +98,7 @@ app.put('/cartoes', async (req, res) => {
         const dadosAtualizados = {};
         if (nome) dadosAtualizados.nome = nome;
         if (valor) dadosAtualizados.valor = valor;
-        if (imagem) dadosAtualizados.imagem = imagem;
-        if (descricao) dadosAtualizados.descricao = descricao;
+        if (img) dadosAtualizados.img = img;
         await cartaoRef.update(dadosAtualizados);
         res.status(200).json({
           message: 'cartão com id' + id

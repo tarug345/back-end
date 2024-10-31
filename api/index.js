@@ -120,14 +120,14 @@ app.delete('/cartoes', async (req, res) => {
 
   if (!id) {
     res.status(400).json({ message: 'id do cartão e obrig' });
-    console.log('nao');
+    console.log('erro id');
   } else {
     try {
       const cartaoRef = db.collection('cartoes').doc(id);
       const doc = await cartaoRef.get();
       if (!doc.exists) {
         res.status(400).json({ message: 'cartão com id' + id + 'inexistente' });
-        console.log('nao');
+        console.log('erro achar');
       } else {
         await cartaoRef.delete();
         res.status(200).json({

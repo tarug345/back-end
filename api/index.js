@@ -126,15 +126,15 @@ app.delete('/cartoes', async (req, res) => {
       const cartaoRef = db.collection('cartoes').doc(id);
       const doc = await cartaoRef.get();
       if (!doc.exists) {
-        res.status(400).json({ message: 'cartão com id' + cartao + 'inexistente' });
+        res.status(400).json({ message: 'cartão com id' + id + 'inexistente' });
         console.log('nao');
       } else {
         await cartaoRef.delete();
         res.status(200).json({
-          message: 'cartão com id' + cartao
+          message: 'cartão com id' + id
             + 'deletado'
         });
-        console.log('cartão com id' + cartao + 'deletado');
+        console.log('cartão com id' + id + 'deletado');
       }
 
     } catch (e) {
